@@ -2,22 +2,28 @@
 //using older version of socket.io
 const io = require('socket.io')(8900, {
     cors: {
-        origin:"http://127.0.0.1:5500",
-        credentials: true,
+        // origin:"http://127.0.0.1:5500",
+            origin:"localhost:3001",
+        // credentials: true,
       }
 })
 
 const {createGameState, initGame} = require('./game')
+const {singlePlayercreateGameState, singlePlayergameLoop} = require('./game')
 const {FRAME_RATE} = require('./constants')
 const {gameLoop} = require('./game')
 const {getUpdatedVeolicty} = require('./game')
 const {makeid} = require('./utils')
-const state = {}
+const e = require('cors')
+let state = {}
 const clientRooms = {}
 
+let singlePlayer = true
+//this runs when a client connects
 io.on('connection', client => {
+    if (singlePlayer !== true) {
     startGameInterval(client,state)
-    client.emit('init', {data: 'hello world'})
+    // client.emit('init', {data: 'hello world'})
 
     client.on('keydown', handleKeydown)
     client.on('newGame', handleNewGame)
@@ -36,6 +42,7 @@ io.on('connection', client => {
         }
 
         if (numClients === 0) {
+            console.log(room)
             client.emit('unknownGame')
             return
         }
@@ -89,6 +96,49 @@ io.on('connection', client => {
             state[roomName].players[client.number - 1].vel = vel
         }
     }
+}
+
+else if (singlePlayer === true) {
+    state = singlePlayercreateGameState()
+
+    client.on('keydown', handleKeydown)
+    singlePlayerStartGameInterval(client,state)
+    // client.emit('init', {data: 'hello world'})
+
+    function singlePlayerStartGameInterval(client,state) {
+        const intervalId = setInterval(() => {
+            const winner = singlePlayergameLoop(state)
+            if (!winner) {
+                client.emit('singlePlayergameState', JSON.stringify(state))
+                
+            }
+            else{
+                client.emit('gameOver')
+                clearInterval(intervalId)
+            }
+        }, 1000 / FRAME_RATE)
+    }
+
+
+
+    function handleKeydown(keyCode) {
+        
+        try {
+            keyCode = parseInt(keyCode)
+        }
+        catch (err) {
+            console.log(err)
+            return
+        }
+
+        const vel = getUpdatedVeolicty(keyCode)
+        console.log(keyCode, 'KEYCODE')
+
+        if (vel) {
+            state.player.vel = vel
+        }
+    }
+}
 })
 
 
