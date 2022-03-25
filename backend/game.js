@@ -136,19 +136,27 @@ function randomFood(state) {
 
     state.food = food
 }
-
+let lastInputDirection = {x:0,y:0}
 function getUpdatedVeolicty(keyCode) {
     switch(keyCode) {
         case 37: {
+            if (lastInputDirection.x !== 0) return
+            lastInputDirection = {x:-1,y:0}
             return {x:-1,y:0}
         }
         case 38: {
+            if (lastInputDirection.y !== 0) return
+            lastInputDirection = {x:0,y:-1}
             return {x:0,y:-1}
         }
         case 39: {
+            if (lastInputDirection.x !== 0) return
+            lastInputDirection = {x:1,y:0}
             return {x:1,y:0}
         }
         case 40: {
+            if (lastInputDirection.y !== 0) return
+            lastInputDirection = {x:0,y:1}
             return {x:0,y:1}
         }
     }
@@ -175,7 +183,7 @@ function singlePlayercreateGameState() {
         x: 7,
         y: 7,
     },
-    gridSize: GRIDE_SIZE
+    gridSize: 20
 }
 }
 
@@ -192,7 +200,7 @@ function singlePlayergameLoop(state) {
 
     
     //check if player lost
-    if (playerOne.pos.x < 0 || playerOne.pos.x > GRIDE_SIZE || playerOne.pos.y < 0 || playerOne.pos.y > GRIDE_SIZE) {
+    if (playerOne.pos.x < 0 || playerOne.pos.x > 20 || playerOne.pos.y < 0 || playerOne.pos.y > 20) {
         return 2
     }
 
@@ -225,8 +233,8 @@ function singlePlayergameLoop(state) {
 
 function singlePlayerandomFood(state) {
     food = {
-        x: Math.floor(Math.random() * GRIDE_SIZE),
-        y: Math.floor(Math.random() * GRIDE_SIZE),
+        x: Math.floor(Math.random() * 20),
+        y: Math.floor(Math.random() * 20),
     }
     //check if random food location isn't on the snake, if so randomize again
     for (let i = 0 ; i < state.player.snake.length ; i++){

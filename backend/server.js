@@ -10,15 +10,21 @@ const io = require('socket.io')(8900, {
 
 const {createGameState, initGame} = require('./game')
 const {singlePlayercreateGameState, singlePlayergameLoop} = require('./game')
-const {FRAME_RATE} = require('./constants')
 const {gameLoop} = require('./game')
 const {getUpdatedVeolicty} = require('./game')
 const {makeid} = require('./utils')
 const e = require('cors')
+const {FRAME_RATE, GRIDE_SIZE} = require('./constants')
+
 let state = {}
 const clientRooms = {}
 
 let singlePlayer = true
+
+// if (singlePlayer === true) {
+//     let newGridSize = 20
+//     GRIDE_SIZE = 20
+// }
 //this runs when a client connects
 io.on('connection', client => {
     if (singlePlayer !== true) {
