@@ -3,7 +3,7 @@
 const io = require('socket.io')(8900, {
     cors: {
         // origin:"http://127.0.0.1:5500",
-            origin:"localhost:3001",
+            origin:"localhost:3000",
         // credentials: true,
       }
 })
@@ -13,7 +13,7 @@ const {singlePlayercreateGameState, singlePlayergameLoop} = require('./game')
 const {gameLoop} = require('./game')
 const {getUpdatedVeolicty} = require('./game')
 const {makeid} = require('./utils')
-const e = require('cors')
+// const e = require('cors')
 const {FRAME_RATE, GRIDE_SIZE} = require('./constants')
 
 let state = {}
@@ -27,10 +27,16 @@ let singlePlayer = true
 // }
 //this runs when a client connects
 io.on('connection', client => {
+    client.on('singlePlayer', handleSinglePlayer)
+
+    function handleSinglePlayer(isFalse) {
+        singlePlayer = false
+        console.log('singplayer is', singlePlayer)
+    }
     if (singlePlayer !== true) {
     startGameInterval(client,state)
     // client.emit('init', {data: 'hello world'})
-
+    
     client.on('keydown', handleKeydown)
     client.on('newGame', handleNewGame)
     client.on('joinGame', handleJoinGame)
@@ -174,4 +180,4 @@ function emitGameOver(roomName, winner) {
     .emit('gameOver', JSON.stringify({ winner }))
 } 
 
-io.listen(3000)
+io.listen(3001)
