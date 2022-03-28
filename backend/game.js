@@ -62,10 +62,15 @@ function gameLoop(state) {
     playerTwo.pos.y += playerTwo.vel.y
     //check if player lost
     if (playerOne.pos.x < 0 || playerOne.pos.x > GRIDE_SIZE || playerOne.pos.y < 0 || playerOne.pos.y > GRIDE_SIZE) {
+        console.log('player one x pos',playerOne.pos.x)
+        console.log('player one pos all', playerOne.pos)
+
         return 2
     }
 
     if (playerTwo.pos.x < 0 || playerTwo.pos.x > GRIDE_SIZE || playerTwo.pos.y < 0 || playerTwo.pos.y > GRIDE_SIZE) {
+        console.log('player one x pos',playerOne.pos.x)
+        console.log('player one pos all', playerOne.pos)
         return 1
     }
     //if player eats food, increase size and randomize new food position
@@ -88,6 +93,9 @@ function gameLoop(state) {
             if (playerOne.snake[i].x === playerOne.pos.x && playerOne.snake[i].y === playerOne.pos.y) {
                 return 2
             }
+            else if (playerOne.snake[i].x === playerTwo.pos.x && playerOne.snake[i].y === playerTwo.pos.y){
+                return 1
+            }
         }
         //add to head of snake and remove its last element for movement
         playerOne.snake.push({...playerOne.pos})
@@ -98,6 +106,9 @@ function gameLoop(state) {
         for (let i = 0 ; i < playerTwo.snake.length ; i++){
             if (playerTwo.snake[i].x === playerTwo.pos.x && playerTwo.snake[i].y === playerTwo.pos.y) {
                 return 1
+            }
+            else if (playerTwo.snake[i].x === playerOne.pos.x && playerTwo.snake[i].y === playerOne.pos.y) {
+                return 2
             }
         }
         //add to head of snake and remove its last element for movement
