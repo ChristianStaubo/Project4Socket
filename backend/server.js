@@ -8,7 +8,7 @@ const io = require('socket.io')(8900, {
       }
 })
 
-const {createGameState, initGame} = require('./game')
+const {createGameState, initGame, count} = require('./game')
 const {singlePlayercreateGameState, singlePlayergameLoop} = require('./game')
 const {gameLoop} = require('./game')
 const {getUpdatedVeolicty} = require('./game')
@@ -20,7 +20,7 @@ let state = {}
 const clientRooms = {}
 
 let singlePlayer = true
-
+let scoreCount = 0
 // if (singlePlayer === true) {
 //     let newGridSize = 20
 //     GRIDE_SIZE = 20
@@ -29,8 +29,8 @@ let singlePlayer = true
 io.on('connection', client => {
     client.on('singlePlayer', handleSinglePlayer)
 
-    function handleSinglePlayer(isFalse) {
-        singlePlayer = false
+    function handleSinglePlayer(trueOrFalse) {
+        singlePlayer = trueOrFalse
         console.log('singplayer is', singlePlayer)
     }
     if (singlePlayer !== true) {
@@ -87,7 +87,7 @@ io.on('connection', client => {
     }
 
 
-    function handleKeydown(keyCode) {
+    function handleKeydown(keyCode, gameActive) {
         const roomName =  clientRooms[client.id]
 
         if (!roomName) {
@@ -104,28 +104,39 @@ io.on('connection', client => {
         const vel = getUpdatedVeolicty(keyCode)
         console.log(keyCode, 'KEYCODE')
 
-        if (vel) {
+        if (vel && gameActive === true) {
             state[roomName].players[client.number - 1].vel = vel
         }
     }
 }
 
 else if (singlePlayer === true) {
+    //client.emit sends second argument to client when it listens for init event
+    client.emit('connection')
+    client.emit('init', {data: 'Sending this data'})
+    //set state when client connects
     state = singlePlayercreateGameState()
-
+    client.on('increment', handleIncrement)
     client.on('keydown', handleKeydown)
+
+    function handleIncrement(scoreCount) {
+        scoreCount = scoreCount
+        console.log('The current score is', scoreCount)
+    }
+    //set tick with frame rate using set interval
     singlePlayerStartGameInterval(client,state)
-    // client.emit('init', {data: 'hello world'})
 
     function singlePlayerStartGameInterval(client,state) {
         const intervalId = setInterval(() => {
             const winner = singlePlayergameLoop(state)
             if (!winner) {
+                //if no winner send gameState and continue loop
                 client.emit('singlePlayergameState', JSON.stringify(state))
                 
             }
             else{
                 client.emit('gameOver')
+                client.emit('showScore',{'count':count, 'scoreCount':scoreCount})
                 clearInterval(intervalId)
             }
         }, 1000 / FRAME_RATE)

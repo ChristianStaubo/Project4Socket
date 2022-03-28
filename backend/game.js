@@ -1,14 +1,6 @@
 const {GRIDE_SIZE} = require('./constants')
 
-module.exports = {
-    initGame,
-    gameLoop,
-    getUpdatedVeolicty,
-    createGameState,
-    singlePlayercreateGameState,
-    singlePlayergameLoop,
-    getUpdatedVeolicty
-}
+
 
 function createGameState() {
     return {
@@ -170,7 +162,7 @@ function singlePlayercreateGameState() {
             y:10,
         },
         vel: {
-            x:1,
+            x:0,
             y:0,
         },
         snake: [
@@ -211,6 +203,10 @@ function singlePlayergameLoop(state) {
         playerOne.pos.x += playerOne.vel.x
         playerOne.pos.y += playerOne.vel.y
         singlePlayerandomFood(state)
+        console.log('Food is eaten')
+        incrementCount()
+        
+        console.log('Count is now => ', count)
     }
 
     
@@ -230,7 +226,7 @@ function singlePlayergameLoop(state) {
     return false
 }
 
-
+let count = 1
 function singlePlayerandomFood(state) {
     food = {
         x: Math.floor(Math.random() * 20),
@@ -246,4 +242,20 @@ function singlePlayerandomFood(state) {
 
 
     state.food = food
+}
+
+function incrementCount() {
+   return count += 1
+}
+
+
+module.exports = {
+    initGame,
+    gameLoop,
+    getUpdatedVeolicty,
+    createGameState,
+    singlePlayercreateGameState,
+    singlePlayergameLoop,
+    getUpdatedVeolicty,
+    count
 }
