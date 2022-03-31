@@ -188,4 +188,4 @@ function emitGameOver(roomName, winner) {
     .emit('gameOver', JSON.stringify({ winner }))
 } 
 
-io.listen(process.env.SOCKETLISTEN || 3001)
+io.listen(process.env.PORT|| 3001)
