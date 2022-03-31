@@ -3,7 +3,7 @@ require('dotenv').config()
 const io = require('socket.io')(process.env.HOST || 8900, {
     cors: {
         // origin:"http://127.0.0.1:5500",
-            origin:`${[process.env.FRONTEND]}`,
+            origin:`*`,
         // credentials: true,
       }
 })
