@@ -1,9 +1,9 @@
-
+require('dotenv').config()
 //using older version of socket.io
-const io = require('socket.io')(8900, {
+const io = require('socket.io')(process.env.HOST, {
     cors: {
         // origin:"http://127.0.0.1:5500",
-            origin:"localhost:3000",
+            origin:`${[process.env.FRONTEND]}`,
         // credentials: true,
       }
 })
@@ -21,10 +21,6 @@ const clientRooms = {}
 
 let singlePlayer = true
 let scoreCount = 0
-// if (singlePlayer === true) {
-//     let newGridSize = 20
-//     GRIDE_SIZE = 20
-// }
 //this runs when a client connects
 io.on('connection', client => {
     client.on('singlePlayer', handleSinglePlayer)
@@ -132,11 +128,12 @@ else if (singlePlayer === true) {
             if (!winner) {
                 //if no winner send gameState and continue loop
                 client.emit('singlePlayergameState', JSON.stringify(state))
+                client.emit('showScore')
                 
             }
             else{
                 client.emit('gameOver')
-                client.emit('showScore',{'count':count, 'scoreCount':scoreCount})
+                // client.emit('showScore')
                 clearInterval(intervalId)
             }
         }, 1000 / FRAME_RATE)

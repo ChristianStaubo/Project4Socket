@@ -186,7 +186,8 @@ function singlePlayercreateGameState() {
         x: 7,
         y: 7,
     },
-    gridSize: 20
+    gridSize: 20,
+    score: 0
 }
 }
 
@@ -215,6 +216,7 @@ function singlePlayergameLoop(state) {
         playerOne.pos.y += playerOne.vel.y
         singlePlayerandomFood(state)
         console.log('Food is eaten')
+        state.score += 1
         incrementCount()
         
         console.log('Count is now => ', count)
@@ -256,7 +258,7 @@ function singlePlayerandomFood(state) {
 }
 
 function incrementCount() {
-   return count += 1
+   count += 1
 }
 
 
