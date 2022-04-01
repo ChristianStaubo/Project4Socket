@@ -85,7 +85,9 @@ io.on('connection', client => {
 
     function handleKeydown(keyCode, gameActive) {
         const roomName =  clientRooms[client.id]
-        console.log(clientRooms)
+        // console.log(io.sockets.adapter.rooms[gameCode])
+        // console.log(clientRooms)
+        // console.log('client 1 =>', clientRooms[])
         if (!roomName) {
             return
         }
@@ -99,7 +101,7 @@ io.on('connection', client => {
 
         const vel = getUpdatedVeolicty(keyCode)
         console.log(keyCode, 'KEYCODE')
-
+        console.log(state)
         if (vel && gameActive === true) {
             state[roomName].players[client.number - 1].vel = vel
         }
