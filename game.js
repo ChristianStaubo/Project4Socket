@@ -139,28 +139,61 @@ function randomFood(state) {
 
     state.food = food
 }
-let lastInputDirection = {x:0,y:0}
-function getUpdatedVeolicty(keyCode) {
+let lastInputDirection1 = {x:0,y:1}
+let lastInputDirection2 = {x:1,y:0}
+function getUpdatedVeolicty(keyCode,number) {
     switch(keyCode) {
         case 37: {
-            if (lastInputDirection.x !== 0) return
-            lastInputDirection = {x:-1,y:0}
+            if (number === 1){
+                if (lastInputDirection1.x !== 0) return
+            lastInputDirection1 = {x:-1,y:0}
             return {x:-1,y:0}
+            }
+            else if (number === 2){
+                if (lastInputDirection2.x !== 0) return
+            lastInputDirection2 = {x:-1,y:0}
+            return {x:-1,y:0}
+            }
+            
         }
         case 38: {
-            if (lastInputDirection.y !== 0) return
-            lastInputDirection = {x:0,y:-1}
+            if (number === 1){
+                if (lastInputDirection1.y !== 0) return
+            lastInputDirection1 = {x:0,y:-1}
             return {x:0,y:-1}
+            }
+            else if (number === 2){
+                if (lastInputDirection2.y !== 0) return
+            lastInputDirection2 = {x:0,y:-1}
+            return {x:0,y:-1}
+            }
+            
         }
         case 39: {
-            if (lastInputDirection.x !== 0) return
-            lastInputDirection = {x:1,y:0}
+            if (number === 1){
+                if (lastInputDirection1.x !== 0) return
+            lastInputDirection1 = {x:1,y:0}
             return {x:1,y:0}
+            }
+            else if(number === 2){
+                if (lastInputDirection2.x !== 0) return
+            lastInputDirection2 = {x:1,y:0}
+            return {x:1,y:0}
+            }
+            
         }
         case 40: {
-            if (lastInputDirection.y !== 0) return
-            lastInputDirection = {x:0,y:1}
+            if (number === 1){
+                if (lastInputDirection1.y !== 0) return
+            lastInputDirection1 = {x:0,y:1}
             return {x:0,y:1}
+            }
+            else if (number === 2){
+                if (lastInputDirection2.y !== 0) return
+            lastInputDirection2 = {x:0,y:1}
+            return {x:0,y:1}
+            }
+            
         }
     }
 }

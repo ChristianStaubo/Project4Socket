@@ -98,10 +98,11 @@ io.on('connection', client => {
             console.log(err)
             return
         }
-
-        const vel = getUpdatedVeolicty(keyCode)
+        console.log(client.number)
+        const vel = getUpdatedVeolicty(keyCode, client.number)
         console.log(keyCode, 'KEYCODE')
-        console.log(state)
+        // console.log(state)
+        console.log(client.number)
         if (vel && gameActive === true) {
             state[roomName].players[client.number - 1].vel = vel
         }
@@ -153,7 +154,7 @@ else if (singlePlayer === true) {
             return
         }
 
-        const vel = getUpdatedVeolicty(keyCode)
+        const vel = getUpdatedVeolicty(keyCode,1)
         console.log(keyCode, 'KEYCODE')
 
         if (vel) {
