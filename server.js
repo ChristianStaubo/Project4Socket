@@ -85,7 +85,7 @@ io.on('connection', client => {
 
     function handleKeydown(keyCode, gameActive) {
         const roomName =  clientRooms[client.id]
-
+        console.log(clientRooms)
         if (!roomName) {
             return
         }
