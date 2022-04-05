@@ -31,7 +31,6 @@ io.on('connection', client => {
     }
     if (singlePlayer !== true) {
     startGameInterval(client,state)
-    // client.emit('init', {data: 'hello world'})
     
     client.on('keydown', handleKeydown)
     client.on('newGame', handleNewGame)
